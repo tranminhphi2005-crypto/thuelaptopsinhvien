@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thuê Laptop Sinh Viên</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f2f4f7;
+      background: #f4f6f8;
       margin: 0;
+      padding: 0;
     }
     header {
       background: #0d6efd;
@@ -25,17 +26,7 @@
     h2 {
       color: #0d6efd;
     }
-    .laptop {
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .price {
-      color: #e53935;
-      font-weight: bold;
-    }
-    input, button {
+    input, select, button {
       width: 100%;
       padding: 10px;
       margin-top: 8px;
@@ -45,6 +36,10 @@
       color: white;
       border: none;
       border-radius: 5px;
+      cursor: pointer;
+    }
+    p {
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -52,63 +47,54 @@
 
 <header>
   <h1>Thuê Laptop Sinh Viên</h1>
-  <p>Thuê nhanh – Giá rẻ – Phù hợp học tập</p>
+  <p>Giải pháp thuê laptop nhanh – tiện – tiết kiệm</p>
 </header>
 
 <section>
   <h2>Đăng ký tài khoản</h2>
-  <input type="text" placeholder="Họ và tên">
+  <input type="text" placeholder="Họ tên">
   <input type="text" placeholder="Số điện thoại">
-  <input type="text" placeholder="CCCD / MSSV">
+  <input type="text" placeholder="CCCD">
   <button>Đăng ký</button>
 </section>
 
 <section>
-  <h2>Danh sách laptop cho thuê</h2>
-
-  <div class="laptop">
-    <p><b>HP EliteBook 840 G3</b></p>
-    <p>Core i5 • RAM 8GB • SSD 256GB</p>
-    <p class="price">💰 100.000đ / ngày</p>
-    <button>Thuê máy</button>
-  </div>
-
-  <div class="laptop">
-    <p><b>Dell Latitude 5400</b></p>
-    <p>Core i5 • RAM 8GB • SSD 256GB</p>
-    <p class="price">💰 130.000đ / ngày</p>
-    <button>Thuê máy</button>
-  </div>
-
-  <div class="laptop">
-    <p><b>Lenovo ThinkPad T480</b></p>
-    <p>Core i5 • RAM 16GB • SSD 512GB</p>
-    <p class="price">💰 160.000đ / ngày</p>
-    <button>Thuê máy</button>
-  </div>
-
-  <div class="laptop">
-    <p><b>Dell Latitude 5420</b></p>
-    <p>Core i7 • RAM 16GB • SSD 512GB</p>
-    <p class="price">💰 200.000đ / ngày</p>
-    <button>Thuê máy</button>
-  </div>
-
+  <h2>Chọn laptop muốn thuê</h2>
+  <select id="laptopSelect">
+    <option value="Dell Latitude 5420|200000">💻 Dell Latitude 5420 – CPU i5 – RAM 8GB – SSD 256GB (~200.000đ/ngày)</option>
+    <option value="HP ProBook 450 G8|180000">💻 HP ProBook 450 G8 – CPU i5 – RAM 8GB – SSD 256GB (~180.000đ/ngày)</option>
+    <option value="Lenovo ThinkPad E15|150000">💻 Lenovo ThinkPad E15 – CPU i3 – RAM 8GB – SSD 256GB (~150.000đ/ngày)</option>
+    <option value="Acer Aspire 5|120000">💻 Acer Aspire 5 – CPU i3 – RAM 4GB – SSD 128GB (~120.000đ/ngày)</option>
+    <option value="Asus VivoBook 14|100000">💻 Asus VivoBook 14 – CPU i3 – RAM 4GB – SSD 128GB (~100.000đ/ngày)</option>
+  </select>
+  <p id="laptopPrice"><b>Giá thuê:</b> 200.000đ / ngày</p>
 </section>
 
 <section>
-  <h2>Địa chỉ & liên hệ</h2>
-  <p>📍 123 Nguyễn Văn Cừ, Quận 5, TP.HCM</p>
-  <p>📞 0909 123 456</p>
+  <h2>Chọn địa chỉ cho thuê</h2>
+  <select id="addressSelect">
+    <option value="123 Nguyễn Văn Cừ, Quận 5, TP.HCM|0909123456">📍 123 Nguyễn Văn Cừ, Quận 5, TP.HCM – 📞 0909 123 456</option>
+    <option value="456 Lê Hồng Phong, Quận 10, TP.HCM|0912345678">📍 456 Lê Hồng Phong, Quận 10, TP.HCM – 📞 0912 345 678</option>
+    <option value="789 Nguyễn Trãi, Quận 1, TP.HCM|0923456789">📍 789 Nguyễn Trãi, Quận 1, TP.HCM – 📞 0923 456 789</option>
+  </select>
 </section>
 
 <section>
   <h2>Hợp đồng thuê</h2>
-  <p>
-    Người thuê cam kết sử dụng laptop đúng mục đích học tập,
-    bảo quản thiết bị trong thời gian thuê và hoàn trả đúng hạn.
-  </p>
+  <p>Người thuê cam kết bảo quản laptop trong thời gian thuê.</p>
 </section>
+
+<script>
+  const laptopSelect = document.getElementById('laptopSelect');
+  const laptopPrice = document.getElementById('laptopPrice');
+
+  laptopSelect.addEventListener('change', function() {
+    const selected = laptopSelect.value.split('|');
+    const price = selected[1];
+  laptopPrice.innerHTML = `<b>Giá thuê:</b> ${price}đ / ngày`;
+  });
+</script>
 
 </body>
 </html>
+    
