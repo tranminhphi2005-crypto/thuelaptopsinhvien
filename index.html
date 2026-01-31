@@ -1,100 +1,178 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Thuê Laptop Sinh Viên</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #0d6efd;
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
-    section {
-      background: white;
-      margin: 15px;
-      padding: 15px;
-      border-radius: 8px;
-    }
-    h2 {
-      color: #0d6efd;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-    }
-    button {
-      background: #0d6efd;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    p {
-      margin: 5px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuê Laptop Sinh Viên</title>
+<style>
+body { font-family: Arial; margin:0; background:#f4f4f4; }
+header { background:#007bff; color:white; padding:15px; text-align:center; }
+.container { padding:15px; }
+input, button, select { width:100%; padding:10px; margin:6px 0; }
+button { background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer; }
+.card { background:white; padding:15px; margin:10px 0; border-radius:6px; }
+.small { color:#555; font-size:14px; }
+#map { background:#e0e0e0; height:180px; text-align:center; line-height:180px; margin-top:10px; border-radius:6px; }
+.link { color:#007bff; text-align:center; margin-top:10px; cursor:pointer; }
+
+/* Ẩn các màn hình */
+.screen { display:none; }
+.screen.active { display:block; }
+</style>
 </head>
 <body>
 
-<header>
-  <h1>Thuê Laptop Sinh Viên</h1>
-  <p>Giải pháp thuê laptop nhanh – tiện – tiết kiệm</p>
-</header>
+<header><h2>App Thuê Laptop Sinh Viên</h2></header>
 
-<section>
-  <h2>Đăng ký tài khoản</h2>
-  <input type="text" placeholder="Họ tên">
-  <input type="text" placeholder="Số điện thoại">
-  <input type="text" placeholder="CCCD">
-  <button>Đăng ký</button>
-</section>
+<div class="container">
 
-<section>
-  <h2>Chọn laptop muốn thuê</h2>
-  <select id="laptopSelect">
-    <option value="Dell Latitude 5420|200000">💻 Dell Latitude 5420 – CPU i5 – RAM 8GB – SSD 256GB (~200.000đ/ngày)</option>
-    <option value="HP ProBook 450 G8|180000">💻 HP ProBook 450 G8 – CPU i5 – RAM 8GB – SSD 256GB (~180.000đ/ngày)</option>
-    <option value="Lenovo ThinkPad E15|150000">💻 Lenovo ThinkPad E15 – CPU i3 – RAM 8GB – SSD 256GB (~150.000đ/ngày)</option>
-    <option value="Acer Aspire 5|120000">💻 Acer Aspire 5 – CPU i3 – RAM 4GB – SSD 128GB (~120.000đ/ngày)</option>
-    <option value="Asus VivoBook 14|100000">💻 Asus VivoBook 14 – CPU i3 – RAM 4GB – SSD 128GB (~100.000đ/ngày)</option>
-  </select>
-  <p id="laptopPrice"><b>Giá thuê:</b> 200.000đ / ngày</p>
-</section>
+  <!-- LOGIN -->
+  <div id="loginScreen" class="screen active">
+    <h3>Đăng nhập</h3>
+    <input placeholder="Email">
+    <input type="password" placeholder="Mật khẩu">
+    <button onclick="showScreen('homeScreen')">Đăng nhập</button>
+    <div class="link" onclick="showScreen('registerScreen')">Chưa có tài khoản? Đăng ký</div>
+  </div>
 
-<section>
-  <h2>Chọn địa chỉ cho thuê</h2>
-  <select id="addressSelect">
-    <option value="123 Nguyễn Văn Cừ, Quận 5, TP.HCM|0909123456">📍 123 Nguyễn Văn Cừ, Quận 5, TP.HCM – 📞 0909 123 456</option>
-    <option value="456 Lê Hồng Phong, Quận 10, TP.HCM|0912345678">📍 456 Lê Hồng Phong, Quận 10, TP.HCM – 📞 0912 345 678</option>
-    <option value="789 Nguyễn Trãi, Quận 1, TP.HCM|0923456789">📍 789 Nguyễn Trãi, Quận 1, TP.HCM – 📞 0923 456 789</option>
-  </select>
-</section>
+  <!-- REGISTER -->
+  <div id="registerScreen" class="screen">
+    <h3>Đăng ký tài khoản</h3>
+    <input placeholder="Họ và tên">
+    <input placeholder="Email">
+    <input placeholder="Số điện thoại">
+    <input type="password" placeholder="Mật khẩu">
+    <button onclick="showScreen('loginScreen')">Tạo tài khoản & Quay lại đăng nhập</button>
+  </div>
 
-<section>
-  <h2>Hợp đồng thuê</h2>
-  <p>Người thuê cam kết bảo quản laptop trong thời gian thuê.</p>
-</section>
+  <!-- HOME / LIST LAPTOP -->
+  <div id="homeScreen" class="screen">
+    <h3>Laptop cho thuê gần bạn</h3>
+    <div id="laptopList"></div>
+  </div>
+
+  <!-- DETAIL LAPTOP -->
+  <div id="detailScreen" class="screen">
+    <h3 id="detailTitle"></h3>
+    <div class="card">
+      <strong>Thông tin máy</strong>
+      <p id="detailCPU"></p>
+      <p id="detailRAM"></p>
+      <p id="detailSSD"></p>
+      <p id="detailPrice"></p>
+    </div>
+    <div class="card">
+      <strong>Chọn địa chỉ nhận laptop</strong>
+      <select id="addressSelect"></select>
+      <div id="map">Bản đồ cửa hàng (giả lập)</div>
+    </div>
+    <button onclick="showScreen('contractScreen')">Thuê ngay</button>
+    <button onclick="showScreen('homeScreen')">Quay lại</button>
+  </div>
+
+  <!-- CONTRACT -->
+  <div id="contractScreen" class="screen">
+    <h3>Hợp đồng thuê laptop</h3>
+    <div class="card">
+      <p id="contractLaptop"></p>
+      <p id="contractPrice"></p>
+      <p id="contractAddress"></p>
+      <p id="contractContact"></p>
+      <p>Thời hạn: Theo ngày</p>
+      <p>Cam kết bồi thường nếu hư hỏng</p>
+    </div>
+  <button onclick="alert('Thuê laptop thành công!'); showScreen('homeScreen')">Đồng ý & Xác nhận</button>
+  </div>
+
+</div>
 
 <script>
-  const laptopSelect = document.getElementById('laptopSelect');
-  const laptopPrice = document.getElementById('laptopPrice');
+// Dữ liệu laptop
+const laptops = [
+  {
+    name: "Dell Latitude 5420", cpu:"Intel Core i5 Gen 11", ram:"16GB", ssd:"512GB SSD", price:"200.000đ / ngày",
+    addresses:[{addr:"123 Nguyễn Văn Cừ, Q5", contact:"0909 123 456"}, {addr:"456 Lê Hồng Phong, Q10", contact:"0912 345 678"}]
+  },
+  {
+    name:"HP ProBook 450 G8", cpu:"Intel Core i5 Gen 10", ram:"8GB", ssd:"256GB SSD", price:"180.000đ / ngày",
+    addresses:[{addr:"789 Nguyễn Trãi, Q1", contact:"0923 456 789"}]
+  },
+  {
+    name:"Lenovo ThinkPad E15", cpu:"Intel Core i3 Gen 10", ram:"8GB", ssd:"256GB SSD", price:"150.000đ / ngày",
+    addresses:[{addr:"654 Phan Xích Long, QPN", contact:"0945 678 901"}]
+  },
+  {
+    name:"Acer Aspire 5", cpu:"Intel Core i3 Gen 9", ram:"4GB", ssd:"128GB SSD", price:"120.000đ / ngày",
+    addresses:[{addr:"987 Hoàng Diệu, Q4", contact:"0956 789 012"}]
+  },
+  {
+    name:"Asus VivoBook 14", cpu:"Intel Core i3 Gen 9", ram:"4GB", ssd:"128GB SSD", price:"100.000đ / ngày",
+    addresses:[{addr:"159 Lê Lai, Q1", contact:"0967 890 123"}]
+  }
+];
 
-  laptopSelect.addEventListener('change', function() {
-    const selected = laptopSelect.value.split('|');
-    const price = selected[1];
-  laptopPrice.innerHTML = `<b>Giá thuê:</b> ${price}đ / ngày`;
+let selectedLaptop = null;
+let selectedAddress = null;
+
+// Hàm hiển thị màn hình
+function showScreen(screenId){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  
+  // Nếu sang màn hình home, render danh sách laptop
+  if(screenId==='homeScreen') renderLaptopList();
+  if(screenId==='detailScreen') renderLaptopDetail();
+  if(screenId==='contractScreen') renderContract();
+}
+
+// Render danh sách laptop
+function renderLaptopList(){
+  const listDiv = document.getElementById('laptopList');
+  listDiv.innerHTML = '';
+  laptops.forEach((l,i)=>{
+    listDiv.innerHTML += `
+      <div class="card">
+        <strong>${l.name}</strong><br>
+        <span class="small">Giá thuê: ${l.price}</span><br>
+        <button onclick="selectLaptop(${i})">Xem chi tiết</button>
+      </div>
+    `;
   });
+}
+
+// Chọn laptop
+function selectLaptop(index){
+  selectedLaptop = laptops[index];
+  selectedAddress = selectedLaptop.addresses[0];
+  showScreen('detailScreen');
+}
+
+// Render chi tiết laptop
+function renderLaptopDetail(){
+  document.getElementById('detailTitle').innerText = selectedLaptop.name;
+  document.getElementById('detailCPU').innerText = 'CPU: '+selectedLaptop.cpu;
+  document.getElementById('detailRAM').innerText = 'RAM: '+selectedLaptop.ram;
+  document.getElementById('detailSSD').innerText = 'Ổ cứng: '+selectedLaptop.ssd;
+  document.getElementById('detailPrice').innerHTML = '<strong>Giá thuê:</strong> '+selectedLaptop.price;
+  
+  const select = document.getElementById('addressSelect');
+  select.innerHTML = '';
+  selectedLaptop.addresses.forEach((a,i)=>{
+    select.innerHTML += `<option value="${i}">${a.addr} – ${a.contact}</option>`;
+  });
+  select.onchange = ()=>selectedAddress = selectedLaptop.addresses[select.value];
+}
+
+// Render hợp đồng
+function renderContract(){
+  document.getElementById('contractLaptop').innerHTML = '<strong>Laptop:</strong> '+selectedLaptop.name;
+  document.getElementById('contractPrice').innerHTML = '<strong>Giá thuê:</strong> '+selectedLaptop.price;
+  document.getElementById('contractAddress').innerHTML = '<strong>Địa chỉ nhận:</strong> '+selectedAddress.addr;
+  document.getElementById('contractContact').innerHTML = '<strong>Liên hệ:</strong> '+selectedAddress.contact;
+}
+
 </script>
 
 </body>
 </html>
-    
+  
