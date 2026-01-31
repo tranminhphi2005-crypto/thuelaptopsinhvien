@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuê Laptop Sinh Viên</title>
+<style>
+body { font-family: Arial; margin:0; background:#f4f4f4; }
+header { background:#007bff; color:white; padding:15px; text-align:center; }
+.container { padding:15px; }
+input, button { width:100%; padding:10px; margin:6px 0; }
+button { background:#007bff; color:white; border:none; border-radius:5px; }
+.card { background:white; padding:15px; margin:10px 0; border-radius:6px; }
+.small { color:#555; font-size:14px; }
+#map { background:#e0e0e0; height:180px; text-align:center; line-height:180px; margin-top:10px; border-radius:6px; }
+.link { color:#007bff; text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h2>App Thuê Laptop Sinh Viên</h2>
+</header>
+
+<div class="container" id="app"></div>
+
+<script>
+// DATA GIẢ LẬP
+const laptops = [
+  {
+    name: "Dell Latitude 5420",
+    cpu: "Intel Core i5 Gen 11",
+    ram: "16GB",
+    ssd: "512GB SSD",
+    price: "200.000đ / ngày",
+    address: "123 Nguyễn Văn Cừ, Q5, TP.HCM",
+    contact: "0909 123 456"
+  }
+];
+
+let screen = "login";
+let selectedLaptop = null;
+
+// RENDER
+function render(){
+  const app = document.getElementById("app");
+  app.innerHTML = "";
+  if(screen==="login") loginScreen(app);
+  if(screen==="register") registerScreen(app);
+  if(screen==="home") homeScreen(app);
+  if(screen==="detail") detailScreen(app);
+  if(screen==="contract") contractScreen(app);
+}
+
+// LOGIN
+function loginScreen(app){
+  app.innerHTML = `
+    <h3>Đăng nhập</h3>
+    <input placeholder="Email">
+    <input type="password" placeholder="Mật khẩu">
+    <button onclick="screen='home'; render()">Đăng nhập</button>
+    <div class="link" onclick="screen='register'; render()">Chưa có tài khoản? Đăng ký</div>
+  `;
+}
+
+// REGISTER
+function registerScreen(app){
+  app.innerHTML = `
+    <h3>Đăng ký tài khoản</h3>
+    <input placeholder="Họ và tên">
+    <input placeholder="Email">
+    <input placeholder="Số điện thoại">
+    <input placeholder="Mật khẩu">
+    <button onclick="screen='login'; render()">Tạo tài khoản</button>
+  `;
+}
+
+// HOME
+function homeScreen(app){
+  app.innerHTML = `<h3>Laptop cho thuê gần bạn</h3>`;
+  laptops.forEach((l,i)=>{
+    app.innerHTML += `
+      <div class="card">
+        <strong>${l.name}</strong><br>
+        <span class="small">Giá thuê: ${l.price}</span><br>
+        <button onclick="selectedLaptop=laptops[${i}]; screen='detail'; render()">Xem chi tiết</button>
+      </div>
+    `;
+  });
+}
+
+// DETAIL
+function detailScreen(app){
+  app.innerHTML = `
+    <h3>${selectedLaptop.name}</h3>
+    <div class="card">
+      <strong>Thông tin máy</strong>
+      <p>CPU: ${selectedLaptop.cpu}</p>
+      <p>RAM: ${selectedLaptop.ram}</p>
+      <p>Ổ cứng: ${selectedLaptop.ssd}</p>
+      <p><strong>Giá thuê:</strong> ${selectedLaptop.price}</p>
+    </div>
+
+    <div class="card">
+      <strong>Địa chỉ cho thuê</strong>
+      <p>${selectedLaptop.address}</p>
+      <div id="map">Bản đồ cửa hàng (giả lập)</div>
+    </div>
+
+    <div class="card">
+      <strong>Thông tin liên lạc</strong>
+      <p>${selectedLaptop.contact}</p>
+    </div>
+
+    <button onclick="screen='contract'; render()">Thuê ngay</button>
+    <button onclick="screen='home'; render()">Quay lại</button>
+  `;
+}
+
+// CONTRACT
+function contractScreen(app){
+  app.innerHTML = `
+    <h3>Hợp đồng thuê laptop</h3>
+    <div class="card">
+      <p>Laptop: ${selectedLaptop.name}</p>
+      <p>Giá thuê: ${selectedLaptop.price}</p>
+      <p>Thời hạn: Theo ngày</p>
+      <p>Cam kết bồi thường nếu hư hỏng</p>
+    </div>
+    <button onclick="alert('Thuê laptop thành công!'); screen='home'; render()">Đồng ý & xác nhận</button>
+  `;
+}
+
+// START
+render();
+</script>
+
+</body>
+</html>
